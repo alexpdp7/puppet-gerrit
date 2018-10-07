@@ -11,7 +11,7 @@ class gerrit {
   }
   ->
   exec {'install basic plugins':
-    command => '/bin/unzip -j /home/gerrit/gerrit.war \'WEB-INF/plugins/*\'',
+    command => '/bin/unzip -j -u /home/gerrit/gerrit.war \'WEB-INF/plugins/*\'',
     cwd => '/home/gerrit/site/plugins/',
   }
   ->
