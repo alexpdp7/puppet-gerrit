@@ -1,0 +1,16 @@
+[Unit]
+Description=Web based code review and project management for Git based projects
+After=network.target
+
+[Service]
+Type=forking
+User=gerrit
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gerrit
+ExecStart=/home/gerrit/site/bin/gerrit.sh start
+ExecStop=/home/gerrit/site/bin/gerrit.sh stop
+PIDFile=/home/gerrit/site/logs/gerrit.pid
+
+[Install]
+WantedBy=multi-user.target

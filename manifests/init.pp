@@ -8,6 +8,15 @@ class gerrit {
   ->
   file {'/home/gerrit/gerrit.war':
     source => 'https://gerrit-releases.storage.googleapis.com/gerrit-2.15.4.war',
+    notify => Service['gerrit'],
+  }
+  ->
+  exec {'init gerrit':
+    command => '/usr/bin/java -jar /home/gerrit/gerrit.war init -d /home/gerrit/site/',
+    user => 'gerrit',
+    require => [Package['java-1.8.0-openjdk-headless'],
+                File['/home/gerrit/gerrit.war']],
+    creates => '/home/gerrit/site',
   }
   ->
   exec {'install basic plugins':
@@ -19,12 +28,11 @@ class gerrit {
     source => 'https://gerrit-ci.gerritforge.com/view/Plugins-stable-2.15/job/plugin-gitiles-bazel-stable-2.15/lastSuccessfulBuild/artifact/bazel-genfiles/plugins/gitiles/gitiles.jar',
   }
 
-
-  exec {'init gerrit':
-    command => '/usr/bin/java -jar /home/gerrit/gerrit.war init -d /home/gerrit/site/',
-    user => 'gerrit',
-    require => [Package['java-1.8.0-openjdk-headless'],
-                File['/home/gerrit/gerrit.war']],
-    creates => '/home/gerrit/site',
+  file {'/etc/systemd/system/gerrit.service':
+    source => 'puppet:///modules/gerrit/gerrit.service',
+  }
+  ~>
+  exec {'reload systemd daemon':
+    command => '/bin/systemctl daemon-reload',
   }
 }
