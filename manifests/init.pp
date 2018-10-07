@@ -9,6 +9,16 @@ class gerrit {
   file {'/home/gerrit/gerrit.war':
     source => 'https://gerrit-releases.storage.googleapis.com/gerrit-2.15.4.war',
   }
+  ->
+  exec {'install basic plugins':
+    command => '/bin/unzip -j /home/gerrit/gerrit.war \'WEB-INF/plugins/*\'',
+    cwd => '/home/gerrit/site/plugins/',
+  }
+  ->
+  file {'/home/gerrit/site/plugins/gitiles.jar':
+    source => 'https://gerrit-ci.gerritforge.com/view/Plugins-stable-2.15/job/plugin-gitiles-bazel-stable-2.15/lastSuccessfulBuild/artifact/bazel-genfiles/plugins/gitiles/gitiles.jar',
+  }
+
 
   exec {'init gerrit':
     command => '/usr/bin/java -jar /home/gerrit/gerrit.war init -d /home/gerrit/site/',
