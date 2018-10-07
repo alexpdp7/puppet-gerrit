@@ -1,0 +1,9 @@
+<%- | $backup_user,
+| -%>
+#!/bin/sh
+
+systemctl stop gerrit
+FILE=/home/<%= $backup_user %>/gerrit_$(date -Iminutes).tar.gz
+tar -czf $FILE -C /home/gerrit/site db git
+chown <%= $backup_user %> $FILE
+systemctl start gerrit

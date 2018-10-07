@@ -1,4 +1,4 @@
-class gerrit {
+class gerrit($backup_user) {
   package {['java-1.8.0-openjdk-headless', 'git']:}
 
   user {'gerrit':
@@ -34,5 +34,10 @@ class gerrit {
   ~>
   exec {'reload systemd daemon':
     command => '/bin/systemctl daemon-reload',
+  }
+
+  file {'/etc/cron.daily/gerrit-backup':
+    content => epp('gerrit/backup', {'backup_user' => $backup_user,}),
+    mode => '0744',
   }
 }
