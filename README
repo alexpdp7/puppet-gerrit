@@ -1,0 +1,31 @@
+Minimal and shoddy Gerrit Puppet module
+
+Sets up Gerrit, adds basic and gitiles plugin, configures a systemd unit file
+and drops a backup script.
+
+I use it like:
+
+  class {'gerrit':
+    backup_user => 'backups',
+  }
+  ->
+  service {'gerrit':
+    ensure => running,
+    enable => true,
+  }
+
+  exec {'change gerrit config X':
+    command => '/usr/bin/git config --file /home/gerrit/site/etc/gerrit.config X Y',
+    user => 'gerrit',
+    cwd => '/home/gerrit',
+  }
+
+  Service['gerrit']
+  ->
+  [Exec['change gerrit config X'], ...]
+  ~>
+  exec {'force gerrit restart after changing config':
+    command => '/usr/bin/systemctl restart gerrit',
+  }
+
+, which does not handle dependencies very well, but suffices for my needs.
