@@ -7,7 +7,7 @@ class gerrit($backup_user) {
   }
   ->
   file {'/home/gerrit/gerrit.war':
-    source => 'https://gerrit-releases.storage.googleapis.com/gerrit-2.15.4.war',
+    source => 'https://gerrit-releases.storage.googleapis.com/gerrit-2.16.2.war',
     notify => Service['gerrit'],
   }
   ->
