@@ -25,7 +25,7 @@ class gerrit($backup_user) {
   }
   ->
   file {'/home/gerrit/site/plugins/gitiles.jar':
-    source => 'https://gerrit-ci.gerritforge.com/view/Plugins-stable-2.15/job/plugin-gitiles-bazel-stable-2.15/lastSuccessfulBuild/artifact/bazel-genfiles/plugins/gitiles/gitiles.jar',
+    source => 'https://gerrit-ci.gerritforge.com/view/Plugins-stable-2.16/job/plugin-gitiles-bazel-master-stable-2.16/lastSuccessfulBuild/artifact/bazel-genfiles/plugins/gitiles/gitiles.jar',
   }
 
   file {'/etc/systemd/system/gerrit.service':
